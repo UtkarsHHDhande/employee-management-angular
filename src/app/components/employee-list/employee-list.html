@@ -1,0 +1,78 @@
+<div class="page">
+
+  <header class="topbar">
+    <div>
+      <span class="eyebrow">WORKFORCE</span>
+      <h1>Employee Management</h1>
+      <p>Manage your organization's employees and their information.</p>
+    </div>
+
+    <a routerLink="/employees/add" class="add-button">
+      <span>+</span>
+      Add Employee
+    </a>
+  </header>
+
+  <section class="toolbar">
+
+    <div class="search-box">
+      <span>⌕</span>
+
+      <input
+        type="text"
+        placeholder="Search employees..."
+        [ngModel]="searchTerm()"
+        (ngModelChange)="searchTerm.set($event)"
+      />
+    </div>
+
+    <select
+      [ngModel]="department()"
+      (ngModelChange)="department.set($event)"
+    >
+      <option value="All">All Departments</option>
+      <option value="IT">IT</option>
+      <option value="HR">HR</option>
+      <option value="Finance">Finance</option>
+    </select>
+
+  </section>
+
+  <section class="summary">
+    <div>
+      <span>Total Employees</span>
+      <strong>{{ employees().length }}</strong>
+    </div>
+
+    <div>
+      <span>Showing</span>
+      <strong>{{ filteredEmployees().length }}</strong>
+    </div>
+  </section>
+
+  @if (filteredEmployees().length > 0) {
+
+    <section class="employee-grid">
+
+      @for (employee of filteredEmployees(); track employee.id) {
+
+        <app-employee-card
+          [employee]="employee"
+          (delete)="deleteEmployee($event)"
+        />
+
+      }
+
+    </section>
+
+  } @else {
+
+    <div class="empty-state">
+      <div class="empty-icon">⌕</div>
+      <h2>No employees found</h2>
+      <p>Try changing your search or department filter.</p>
+    </div>
+
+  }
+
+</div>

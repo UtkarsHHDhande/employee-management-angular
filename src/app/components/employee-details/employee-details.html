@@ -1,0 +1,66 @@
+<div class="details-page">
+
+  <a routerLink="/employees" class="back">← Back to employees</a>
+
+  @if (employee) {
+
+    <div class="details-card">
+
+      <div class="profile">
+        <div class="avatar">
+          {{ employee.name.charAt(0) }}
+        </div>
+
+        <div>
+          <h1>{{ employee.name }}</h1>
+          <p>{{ employee.designation }}</p>
+        </div>
+      </div>
+
+      <div class="info-grid">
+
+        <div>
+          <span>EMPLOYEE ID</span>
+          <strong>#{{ employee.id }}</strong>
+        </div>
+
+        <div>
+          <span>EMAIL</span>
+          <strong>{{ employee.email }}</strong>
+        </div>
+
+        <div>
+          <span>DEPARTMENT</span>
+          <strong>{{ employee.department }}</strong>
+        </div>
+
+        <div>
+          <span>DESIGNATION</span>
+          <strong>{{ employee.designation }}</strong>
+        </div>
+
+      </div>
+
+      <div class="actions">
+
+        <a
+          [routerLink]="['/employees/edit', employee.id]"
+          class="edit"
+        >
+          Edit Employee
+        </a>
+
+      </div>
+
+    </div>
+
+  } @else {
+
+    <div class="not-found">
+      <h2>Employee not found</h2>
+      <a routerLink="/employees">Return to employees</a>
+    </div>
+
+  }
+
+</div>

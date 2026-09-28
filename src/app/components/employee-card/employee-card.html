@@ -1,0 +1,51 @@
+<article class="card">
+
+  <div class="card-header">
+
+    <div class="avatar">
+      {{ employee().name.charAt(0) }}
+    </div>
+
+    <div class="employee-name">
+      <h3>{{ employee().name }}</h3>
+      <span>ID #{{ employee().id }}</span>
+    </div>
+
+  </div>
+
+  <div class="details">
+
+    <div class="detail">
+      <span class="label">EMAIL</span>
+      <span>{{ employee().email }}</span>
+    </div>
+
+    <div class="detail">
+      <span class="label">DEPARTMENT</span>
+      <span class="badge">{{ employee().department }}</span>
+    </div>
+
+    <div class="detail">
+      <span class="label">DESIGNATION</span>
+      <span>{{ employee().designation }}</span>
+    </div>
+
+  </div>
+
+  <div class="card-actions">
+
+    <a [routerLink]="['/employees', employee().id]">
+      View Details
+    </a>
+
+    <button
+      type="button"
+      class="delete-button"
+      (click)="delete.emit(employee().id)"
+    >
+      Delete
+    </button>
+
+  </div>
+
+</article>

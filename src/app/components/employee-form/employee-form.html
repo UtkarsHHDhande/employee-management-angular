@@ -1,0 +1,100 @@
+<div class="form-page">
+
+  <div class="form-header">
+    <a routerLink="/employees">← Back to employees</a>
+
+    <h1>
+      {{ editingId !== null ? 'Edit Employee' : 'Add Employee' }}
+    </h1>
+
+    <p>
+      {{ editingId !== null
+        ? 'Update the employee information below.'
+        : 'Enter the employee information below.' }}
+    </p>
+  </div>
+
+  <form
+    class="employee-form"
+    [formGroup]="employeeForm"
+    (ngSubmit)="submit()"
+  >
+
+    <div class="form-grid">
+
+      <div class="field">
+        <label>Employee ID</label>
+        <input type="number" formControlName="id">
+
+        @if (employeeForm.controls.id.touched &&
+             employeeForm.controls.id.invalid) {
+          <small>Employee ID is required.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Full Name</label>
+        <input type="text" placeholder="Enter full name" formControlName="name">
+
+        @if (employeeForm.controls.name.touched &&
+             employeeForm.controls.name.invalid) {
+          <small>Name is required.</small>
+        }
+      </div>
+
+      <div class="field full">
+        <label>Email Address</label>
+        <input
+          type="email"
+          placeholder="employee@example.com"
+          formControlName="email"
+        >
+
+        @if (employeeForm.controls.email.touched &&
+             employeeForm.controls.email.invalid) {
+          <small>Enter a valid email address.</small>
+        }
+      </div>
+
+      <div class="field">
+        <label>Department</label>
+
+        <select formControlName="department">
+          <option value="">Select department</option>
+          <option value="IT">IT</option>
+          <option value="HR">HR</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Designation</label>
+        <input
+          type="text"
+          placeholder="e.g. Software Developer"
+          formControlName="designation"
+        >
+
+        @if (employeeForm.controls.designation.touched &&
+             employeeForm.controls.designation.invalid) {
+          <small>Designation is required.</small>
+        }
+      </div>
+
+    </div>
+
+    <div class="form-actions">
+
+      <a routerLink="/employees" class="cancel">
+        Cancel
+      </a>
+
+      <button type="submit">
+        {{ editingId !== null ? 'Update Employee' : 'Add Employee' }}
+      </button>
+
+    </div>
+
+  </form>
+
+</div>
