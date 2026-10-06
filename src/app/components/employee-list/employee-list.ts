@@ -1,43 +1,111 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { EmployeeCard } from '../employee-card/employee-card';
-import { EmployeeService } from '../../services/employee.service';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal
+} from '@angular/core';
+
 import { RouterLink } from '@angular/router';
+
+import { EmployeeService } from '../../services/employee.service';
+import { DepartmentService } from '../../services/department.service';
+
+import { EmployeeCard } from '../employee-card/employee-card';
 
 @Component({
   selector: 'app-employee-list',
-  imports: [FormsModule, EmployeeCard, RouterLink],
+  imports: [
+    EmployeeCard,
+    RouterLink
+  ],
   templateUrl: './employee-list.html',
   styleUrl: './employee-list.css'
 })
-export class EmployeeList {
+export class EmployeeList implements OnInit {
 
-  private employeeService = inject(EmployeeService);
+  private employeeService =
+    inject(EmployeeService);
 
-  employees = this.employeeService.getEmployees();
+  private departmentService =
+    inject(DepartmentService);
 
-  searchTerm = signal('');
-  department = signal('All');
+
+  employees =
+    this.employeeService.employees;
+
+  departments =
+    this.departmentService.departments;
+
+
+  searchText = signal('');
+
+  selectedDepartment =
+    signal('All');
+
 
   filteredEmployees = computed(() => {
-    const search = this.searchTerm().toLowerCase();
-    const selectedDepartment = this.department();
+
+    const search =
+      this.searchText()
+        .trim()
+        .toLowerCase();
+
+    const department =
+      this.selectedDepartment();
+
 
     return this.employees().filter(employee => {
+
       const matchesSearch =
-        employee.name.toLowerCase().includes(search);
+        employee.name
+          .toLowerCase()
+          .includes(search);
+
 
       const matchesDepartment =
-        selectedDepartment === 'All' ||
-        employee.department === selectedDepartment;
+        department === 'All' ||
+        employee.department === department;
 
-      return matchesSearch && matchesDepartment;
+
+      return (
+        matchesSearch &&
+        matchesDepartment
+      );
+
     });
+
   });
 
-  deleteEmployee(id: number) {
-    if (confirm('Are you sure you want to delete this employee?')) {
-      this.employeeService.deleteEmployee(id);
-    }
+
+  ngOnInit(): void {
+
+    this.employeeService.loadEmployees();
+
+    this.departmentService.loadDepartments();
+
   }
+
+
+  onSearch(event: Event): void {
+
+    const input =
+      event.target as HTMLInputElement;
+
+    this.searchText.set(input.value);
+
+  }
+
+
+  onDepartmentChange(event: Event): void {
+
+    const select =
+      event.target as HTMLSelectElement;
+
+    this.selectedDepartment.set(
+      select.value
+    );
+
+  }
+
 }

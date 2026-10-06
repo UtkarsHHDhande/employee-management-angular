@@ -1,0 +1,92 @@
+<div class="container">
+  <div class="row justify-content-center align-items-center min-vh-100">
+
+    <div class="col-md-5 col-lg-4">
+
+      <div class="card shadow border-0">
+
+        <div class="card-body p-4">
+
+          <h2 class="text-center mb-4">
+            Employee Management
+          </h2>
+
+          <p class="text-center text-muted mb-4">
+            Login to continue
+          </p>
+
+          <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Username
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="username"
+              />
+
+              @if (
+                loginForm.controls.username.touched &&
+                loginForm.controls.username.invalid
+              ) {
+                <small class="text-danger">
+                  Username is required.
+                </small>
+              }
+
+            </div>
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Password
+              </label>
+
+              <input
+                type="password"
+                class="form-control"
+                formControlName="password"
+              />
+
+              @if (
+                loginForm.controls.password.touched &&
+                loginForm.controls.password.invalid
+              ) {
+                <small class="text-danger">
+                  Password is required.
+                </small>
+              }
+
+            </div>
+
+            @if (loginError) {
+              <div class="alert alert-danger">
+                Invalid username or password.
+              </div>
+            }
+
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+            >
+              Login
+            </button>
+
+          </form>
+
+          <div class="text-center mt-3 text-muted">
+            Demo: admin / admin123
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>

@@ -1,30 +1,32 @@
 # Employee Management Application
 
-An Angular application for managing employee information.
+A modern Employee Management Application built with Angular for managing employee records with CRUD operations, search, filtering, form validation, authentication, and API-based mock data.
 
 ## Features
 
-- View employees
-- Search employees
-- Filter by department
-- Add employee
-- Edit employee
-- Delete employee
-- View employee details
-- Form validation
-- Angular routing
+- 🔐 Login authentication
+- 🛡️ Route protection using Angular Auth Guard
+- 👥 View all employees
+- 🔍 Search employees by name
+- 🏢 Filter employees by department
+- ➕ Add new employees
+- ✏️ Edit employee information
+- 🗑️ Delete employees
+- 📄 View employee details
+- ✅ Reactive form validation
+- 📋 Department dropdown populated from JSON API
+- 💾 Employee data persistence using LocalStorage
+- 🔄 CRUD operations using Angular services
+- ⚡ Angular Signals for state management
+- 🧭 Angular Router for navigation
+- 📱 Responsive Bootstrap UI
+- 🧩 Reusable employee card component
+- 🧱 Header and footer layout
 
-## Tech Stack
+## Demo Login
 
-- Angular 22
-- TypeScript
-- Reactive Forms
-- Angular Router
-- Signals
-- HTML/CSS
+Use the following credentials to access the application:
 
-## Run Locally
-
-```bash
-npm install
-ng serve
+```text
+Username: admin
+Password: admin123

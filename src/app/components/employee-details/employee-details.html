@@ -1,53 +1,49 @@
-<div class="details-page">
-
-  <a routerLink="/employees" class="back">← Back to employees</a>
+<div class="container py-4">
 
   @if (employee) {
 
-    <div class="details-card">
+    <div class="card shadow-sm border-0">
 
-      <div class="profile">
-        <div class="avatar">
-          {{ employee.name.charAt(0) }}
+      <div class="card-body p-4">
+
+        <h2 class="fw-bold mb-4">
+          Employee Details
+        </h2>
+
+        <div class="row g-3">
+
+          <div class="col-md-6">
+            <strong>Employee ID</strong>
+            <p>{{ employee.id }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <strong>Name</strong>
+            <p>{{ employee.name }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <strong>Email</strong>
+            <p>{{ employee.email }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <strong>Department</strong>
+            <p>{{ employee.department }}</p>
+          </div>
+
+          <div class="col-md-6">
+            <strong>Designation</strong>
+            <p>{{ employee.designation }}</p>
+          </div>
+
         </div>
-
-        <div>
-          <h1>{{ employee.name }}</h1>
-          <p>{{ employee.designation }}</p>
-        </div>
-      </div>
-
-      <div class="info-grid">
-
-        <div>
-          <span>EMPLOYEE ID</span>
-          <strong>#{{ employee.id }}</strong>
-        </div>
-
-        <div>
-          <span>EMAIL</span>
-          <strong>{{ employee.email }}</strong>
-        </div>
-
-        <div>
-          <span>DEPARTMENT</span>
-          <strong>{{ employee.department }}</strong>
-        </div>
-
-        <div>
-          <span>DESIGNATION</span>
-          <strong>{{ employee.designation }}</strong>
-        </div>
-
-      </div>
-
-      <div class="actions">
 
         <a
-          [routerLink]="['/employees/edit', employee.id]"
-          class="edit"
+          routerLink="/employees"
+          class="btn btn-secondary"
         >
-          Edit Employee
+          Back to Employees
         </a>
 
       </div>
@@ -56,9 +52,8 @@
 
   } @else {
 
-    <div class="not-found">
-      <h2>Employee not found</h2>
-      <a routerLink="/employees">Return to employees</a>
+    <div class="alert alert-warning">
+      Employee not found.
     </div>
 
   }

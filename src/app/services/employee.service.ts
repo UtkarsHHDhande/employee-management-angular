@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Employee } from '../models/employee.model';
 
 @Injectable({
@@ -6,55 +7,102 @@ import { Employee } from '../models/employee.model';
 })
 export class EmployeeService {
 
-  private employees = signal<Employee[]>([
-    {
-      id: 101,
-      name: 'Rahul Sharma',
-      email: 'rahul.sharma@example.com',
-      department: 'IT',
-      designation: 'Software Developer'
-    },
-    {
-      id: 102,
-      name: 'Priya Patil',
-      email: 'priya.patil@example.com',
-      department: 'HR',
-      designation: 'HR Executive'
-    },
-    {
-      id: 103,
-      name: 'Amit Verma',
-      email: 'amit.verma@example.com',
-      department: 'Finance',
-      designation: 'Financial Analyst'
+  private employeesSignal = signal<Employee[]>([]);
+
+  readonly employees = this.employeesSignal.asReadonly();
+
+  private initialized = false;
+
+  constructor(private http: HttpClient) {}
+
+  loadEmployees(): void {
+
+    if (this.initialized) {
+      return;
     }
-  ]);
 
-  getEmployees() {
-    return this.employees.asReadonly();
+    this.initialized = true;
+
+    const savedEmployees = localStorage.getItem('employees');
+
+    if (savedEmployees) {
+
+      this.employeesSignal.set(
+        JSON.parse(savedEmployees)
+      );
+
+      return;
+    }
+
+    this.http
+      .get<Employee[]>('/employees.json')
+      .subscribe({
+        next: (employees) => {
+          this.employeesSignal.set(employees);
+          this.saveToLocalStorage(employees);
+        },
+        error: (error) => {
+          console.error(
+            'Failed to load employees:',
+            error
+          );
+        }
+      });
   }
 
-  getEmployeeById(id: number) {
-    return this.employees().find(employee => employee.id === id);
+  getEmployeeById(id: number): Employee | undefined {
+
+    return this.employeesSignal()
+      .find(employee => employee.id === id);
   }
 
-  addEmployee(employee: Employee) {
-    this.employees.update(employees => [...employees, employee]);
-  }
+  addEmployee(employee: Employee): void {
 
-  updateEmployee(updatedEmployee: Employee) {
-    this.employees.update(employees =>
-      employees.map(employee =>
-        employee.id === updatedEmployee.id
-          ? updatedEmployee
-          : employee
-      )
+    const currentEmployees = this.employeesSignal();
+
+    this.employeesSignal.set([
+      ...currentEmployees,
+      employee
+    ]);
+
+    this.saveToLocalStorage(
+      this.employeesSignal()
     );
   }
 
-  deleteEmployee(id: number) {
-    this.employees.update(employees =>
-      employees.filter(employee => employee.id !== id)
+  updateEmployee(updatedEmployee: Employee): void {
+
+    const updatedEmployees =
+      this.employeesSignal().map(employee =>
+        employee.id === updatedEmployee.id
+          ? updatedEmployee
+          : employee
+      );
+
+    this.employeesSignal.set(updatedEmployees);
+
+    this.saveToLocalStorage(updatedEmployees);
+  }
+
+  deleteEmployee(id: number): void {
+
+    const remainingEmployees =
+      this.employeesSignal().filter(
+        employee => employee.id !== id
+      );
+
+    this.employeesSignal.set(remainingEmployees);
+
+    this.saveToLocalStorage(remainingEmployees);
+  }
+
+  private saveToLocalStorage(
+    employees: Employee[]
+  ): void {
+
+    localStorage.setItem(
+      'employees',
+      JSON.stringify(employees)
     );
   }
 }

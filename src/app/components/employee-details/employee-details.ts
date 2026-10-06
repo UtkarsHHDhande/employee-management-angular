@@ -1,6 +1,16 @@
-import { Component, inject } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import {
+  Component,
+  inject,
+  OnInit
+} from '@angular/core';
+
+import {
+  ActivatedRoute,
+  RouterLink
+} from '@angular/router';
+
 import { EmployeeService } from '../../services/employee.service';
+import { Employee } from '../../models/employee.model';
 
 @Component({
   selector: 'app-employee-details',
@@ -8,19 +18,28 @@ import { EmployeeService } from '../../services/employee.service';
   templateUrl: './employee-details.html',
   styleUrl: './employee-details.css'
 })
-export class EmployeeDetails {
+export class EmployeeDetails implements OnInit {
 
-  private route = inject(ActivatedRoute);
-  private employeeService = inject(EmployeeService);
+  private route =
+    inject(ActivatedRoute);
 
-  employee;
+  private employeeService =
+    inject(EmployeeService);
 
-  constructor() {
-    const id = Number(
-      this.route.snapshot.paramMap.get('id')
-    );
+  employee?: Employee;
+
+  ngOnInit(): void {
+
+    this.employeeService.loadEmployees();
+
+    const id =
+      Number(
+        this.route.snapshot.paramMap.get('id')
+      );
 
     this.employee =
       this.employeeService.getEmployeeById(id);
+
   }
+
 }

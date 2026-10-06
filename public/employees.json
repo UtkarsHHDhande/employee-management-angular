@@ -1,0 +1,37 @@
+[
+  {
+    "id": 101,
+    "name": "Rahul Sharma",
+    "email": "rahul@example.com",
+    "department": "IT",
+    "designation": "Software Developer"
+  },
+  {
+    "id": 102,
+    "name": "Priya Patil",
+    "email": "priya@example.com",
+    "department": "HR",
+    "designation": "HR Executive"
+  },
+  {
+    "id": 103,
+    "name": "Amit Joshi",
+    "email": "amit@example.com",
+    "department": "Finance",
+    "designation": "Accountant"
+  },
+  {
+    "id": 104,
+    "name": "Sneha Deshmukh",
+    "email": "sneha@example.com",
+    "department": "IT",
+    "designation": "Frontend Developer"
+  },
+  {
+    "id": 105,
+    "name": "Vikram Singh",
+    "email": "vikram@example.com",
+    "department": "Operations",
+    "designation": "Operations Manager"
+  }
+]

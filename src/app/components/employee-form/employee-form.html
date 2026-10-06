@@ -1,100 +1,263 @@
-<div class="form-page">
+<div class="container py-4">
 
-  <div class="form-header">
-    <a routerLink="/employees">← Back to employees</a>
+  <div class="row justify-content-center">
 
-    <h1>
-      {{ editingId !== null ? 'Edit Employee' : 'Add Employee' }}
-    </h1>
+    <div class="col-lg-8">
 
-    <p>
-      {{ editingId !== null
-        ? 'Update the employee information below.'
-        : 'Enter the employee information below.' }}
-    </p>
+      <div class="card shadow-sm border-0">
+
+        <div class="card-body p-4">
+
+          <h2 class="fw-bold mb-4">
+
+            @if (isEditMode) {
+              Edit Employee
+            } @else {
+              Add Employee
+            }
+
+          </h2>
+
+
+          <form
+            [formGroup]="employeeForm"
+            (ngSubmit)="saveEmployee()"
+            novalidate
+          >
+
+
+            <!-- Employee ID -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Employee ID *
+              </label>
+
+              <input
+                type="number"
+                class="form-control"
+                formControlName="id"
+              />
+
+              @if (
+                id.touched &&
+                id.invalid
+              ) {
+
+                <div class="text-danger small mt-1">
+
+                  @if (id.errors?.['required']) {
+                    Employee ID is required.
+                  }
+
+                  @if (id.errors?.['min']) {
+                    Employee ID must be greater than 0.
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- Name -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Employee Name *
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="name"
+                placeholder="Enter employee name"
+              />
+
+              @if (
+                name.touched &&
+                name.invalid
+              ) {
+
+                <div class="text-danger small mt-1">
+
+                  @if (name.errors?.['required']) {
+                    Employee name is required.
+                  }
+
+                  @if (name.errors?.['minlength']) {
+                    Name must contain at least 3 characters.
+                  }
+
+                  @if (name.errors?.['maxlength']) {
+                    Name cannot exceed 50 characters.
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- Email -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Email *
+              </label>
+
+              <input
+                type="email"
+                class="form-control"
+                formControlName="email"
+                placeholder="employee@example.com"
+              />
+
+              @if (
+                email.touched &&
+                email.invalid
+              ) {
+
+                <div class="text-danger small mt-1">
+
+                  @if (email.errors?.['required']) {
+                    Email is required.
+                  }
+
+                  @if (email.errors?.['email']) {
+                    Please enter a valid email address.
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- Department -->
+
+            <div class="mb-3">
+
+              <label class="form-label">
+                Department *
+              </label>
+
+              <select
+                class="form-select"
+                formControlName="department"
+              >
+
+                <option value="">
+                  Select Department
+                </option>
+
+                @for (
+                  department of departments();
+                  track department.id
+                ) {
+
+                  <option
+                    [value]="department.name"
+                  >
+                    {{ department.name }}
+                  </option>
+
+                }
+
+              </select>
+
+              @if (
+                department.touched &&
+                department.invalid
+              ) {
+
+                <div class="text-danger small mt-1">
+                  Department is required.
+                </div>
+
+              }
+
+            </div>
+
+
+            <!-- Designation -->
+
+            <div class="mb-4">
+
+              <label class="form-label">
+                Designation *
+              </label>
+
+              <input
+                type="text"
+                class="form-control"
+                formControlName="designation"
+                placeholder="Enter designation"
+              />
+
+              @if (
+                designation.touched &&
+                designation.invalid
+              ) {
+
+                <div class="text-danger small mt-1">
+
+                  @if (designation.errors?.['required']) {
+                    Designation is required.
+                  }
+
+                  @if (designation.errors?.['minlength']) {
+                    Designation must contain at least 2 characters.
+                  }
+
+                  @if (designation.errors?.['maxlength']) {
+                    Designation cannot exceed 50 characters.
+                  }
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <div class="d-flex gap-2">
+
+              <button
+                type="submit"
+                class="btn btn-primary"
+              >
+                @if (isEditMode) {
+                  Update Employee
+                } @else {
+                  Add Employee
+                }
+              </button>
+
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="cancel()"
+              >
+                Cancel
+              </button>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
   </div>
-
-  <form
-    class="employee-form"
-    [formGroup]="employeeForm"
-    (ngSubmit)="submit()"
-  >
-
-    <div class="form-grid">
-
-      <div class="field">
-        <label>Employee ID</label>
-        <input type="number" formControlName="id">
-
-        @if (employeeForm.controls.id.touched &&
-             employeeForm.controls.id.invalid) {
-          <small>Employee ID is required.</small>
-        }
-      </div>
-
-      <div class="field">
-        <label>Full Name</label>
-        <input type="text" placeholder="Enter full name" formControlName="name">
-
-        @if (employeeForm.controls.name.touched &&
-             employeeForm.controls.name.invalid) {
-          <small>Name is required.</small>
-        }
-      </div>
-
-      <div class="field full">
-        <label>Email Address</label>
-        <input
-          type="email"
-          placeholder="employee@example.com"
-          formControlName="email"
-        >
-
-        @if (employeeForm.controls.email.touched &&
-             employeeForm.controls.email.invalid) {
-          <small>Enter a valid email address.</small>
-        }
-      </div>
-
-      <div class="field">
-        <label>Department</label>
-
-        <select formControlName="department">
-          <option value="">Select department</option>
-          <option value="IT">IT</option>
-          <option value="HR">HR</option>
-          <option value="Finance">Finance</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Designation</label>
-        <input
-          type="text"
-          placeholder="e.g. Software Developer"
-          formControlName="designation"
-        >
-
-        @if (employeeForm.controls.designation.touched &&
-             employeeForm.controls.designation.invalid) {
-          <small>Designation is required.</small>
-        }
-      </div>
-
-    </div>
-
-    <div class="form-actions">
-
-      <a routerLink="/employees" class="cancel">
-        Cancel
-      </a>
-
-      <button type="submit">
-        {{ editingId !== null ? 'Update Employee' : 'Add Employee' }}
-      </button>
-
-    </div>
-
-  </form>
 
 </div>

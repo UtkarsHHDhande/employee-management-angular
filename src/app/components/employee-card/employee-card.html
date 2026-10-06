@@ -1,51 +1,72 @@
-<article class="card">
+<div class="card h-100 shadow-sm border-0">
 
-  <div class="card-header">
+  <div class="card-body">
 
-    <div class="avatar">
-      {{ employee().name.charAt(0) }}
+    <div class="d-flex justify-content-between align-items-start">
+
+      <div>
+
+        <h5 class="card-title fw-bold mb-1">
+          {{ employee().name }}
+        </h5>
+
+        <p class="text-muted mb-0">
+          {{ employee().designation }}
+        </p>
+
+      </div>
+
+      <span class="badge bg-primary">
+        {{ employee().department }}
+      </span>
+
     </div>
 
-    <div class="employee-name">
-      <h3>{{ employee().name }}</h3>
-      <span>ID #{{ employee().id }}</span>
+    <hr>
+
+    <p class="mb-2">
+      <strong>ID:</strong>
+      {{ employee().id }}
+    </p>
+
+    <p class="mb-3">
+      <strong>Email:</strong>
+      {{ employee().email }}
+    </p>
+
+
+    <div class="d-flex gap-2">
+
+      <a
+        [routerLink]="[
+          '/employees/edit',
+          employee().id
+        ]"
+        class="btn btn-outline-primary btn-sm"
+      >
+        Edit
+      </a>
+
+      <a
+        [routerLink]="[
+          '/employees',
+          employee().id
+        ]"
+        class="btn btn-outline-secondary btn-sm"
+      >
+        Details
+      </a>
+
+      <button
+        type="button"
+        class="btn btn-outline-danger btn-sm"
+        (click)="deleteEmployee()"
+      >
+        Delete
+      </button>
+
     </div>
 
   </div>
 
-  <div class="details">
-
-    <div class="detail">
-      <span class="label">EMAIL</span>
-      <span>{{ employee().email }}</span>
-    </div>
-
-    <div class="detail">
-      <span class="label">DEPARTMENT</span>
-      <span class="badge">{{ employee().department }}</span>
-    </div>
-
-    <div class="detail">
-      <span class="label">DESIGNATION</span>
-      <span>{{ employee().designation }}</span>
-    </div>
-
-  </div>
-
-  <div class="card-actions">
-
-    <a [routerLink]="['/employees', employee().id]">
-      View Details
-    </a>
-
-    <button
-      type="button"
-      class="delete-button"
-      (click)="delete.emit(employee().id)"
-    >
-      Delete
-    </button>
-
-  </div>
-
-</article>
+</div>

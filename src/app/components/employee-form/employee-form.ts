@@ -1,65 +1,196 @@
-import { Component, inject } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit
+} from '@angular/core';
+
 import {
   FormBuilder,
   ReactiveFormsModule,
   Validators
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+
 import { EmployeeService } from '../../services/employee.service';
-import { RouterLink } from '@angular/router';
+import { DepartmentService } from '../../services/department.service';
 
 @Component({
   selector: 'app-employee-form',
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule],
   templateUrl: './employee-form.html',
   styleUrl: './employee-form.css'
 })
-export class EmployeeForm {
+export class EmployeeForm implements OnInit {
 
   private fb = inject(FormBuilder);
-  private employeeService = inject(EmployeeService);
-  private router = inject(Router);
-  private route = inject(ActivatedRoute);
+  private employeeService =
+    inject(EmployeeService);
 
-  editingId: number | null = null;
+  private departmentService =
+    inject(DepartmentService);
 
-  employeeForm = this.fb.nonNullable.group({
-    id: [0, Validators.required],
-    name: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    department: ['', Validators.required],
-    designation: ['', Validators.required]
-  });
+  private route =
+    inject(ActivatedRoute);
 
-  constructor() {
-    const id = this.route.snapshot.paramMap.get('id');
+  private router =
+    inject(Router);
+
+
+  departments =
+    this.departmentService.departments;
+
+
+  isEditMode = false;
+
+  employeeId: number | null = null;
+
+
+  employeeForm =
+    this.fb.nonNullable.group({
+
+      id: [
+        0,
+        [
+          Validators.required,
+          Validators.min(1)
+        ]
+      ],
+
+      name: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(3),
+          Validators.maxLength(50)
+        ]
+      ],
+
+      email: [
+        '',
+        [
+          Validators.required,
+          Validators.email
+        ]
+      ],
+
+      department: [
+        '',
+        Validators.required
+      ],
+
+      designation: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(2),
+          Validators.maxLength(50)
+        ]
+      ]
+
+    });
+
+
+  ngOnInit(): void {
+
+    this.employeeService.loadEmployees();
+
+    this.departmentService.loadDepartments();
+
+
+    const id =
+      this.route.snapshot.paramMap.get('id');
+
 
     if (id) {
-      this.editingId = Number(id);
+
+      this.isEditMode = true;
+
+      this.employeeId =
+        Number(id);
 
       const employee =
-        this.employeeService.getEmployeeById(this.editingId);
+        this.employeeService
+          .getEmployeeById(this.employeeId);
+
 
       if (employee) {
-        this.employeeForm.patchValue(employee);
+
+        this.employeeForm.patchValue(
+          employee
+        );
+
       }
+
     }
+
   }
 
-  submit() {
+
+  get name() {
+    return this.employeeForm.controls.name;
+  }
+
+  get id() {
+    return this.employeeForm.controls.id;
+  }
+
+  get email() {
+    return this.employeeForm.controls.email;
+  }
+
+  get department() {
+    return this.employeeForm.controls.department;
+  }
+
+  get designation() {
+    return this.employeeForm.controls.designation;
+  }
+
+
+  saveEmployee(): void {
+
     if (this.employeeForm.invalid) {
+
       this.employeeForm.markAllAsTouched();
+
       return;
     }
 
-    const employee = this.employeeForm.getRawValue();
 
-    if (this.editingId !== null) {
-      this.employeeService.updateEmployee(employee);
+    const employee =
+      this.employeeForm.getRawValue();
+
+
+    if (this.isEditMode) {
+
+      this.employeeService
+        .updateEmployee(employee);
+
     } else {
-      this.employeeService.addEmployee(employee);
+
+      this.employeeService
+        .addEmployee(employee);
+
     }
 
-    this.router.navigate(['/employees']);
+
+    this.router.navigate([
+      '/employees'
+    ]);
+
   }
+
+
+  cancel(): void {
+
+    this.router.navigate([
+      '/employees'
+    ]);
+
+  }
+
 }
